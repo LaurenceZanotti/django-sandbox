@@ -1,10 +1,12 @@
 {% extends "tasks/layout.html" %}
 
 {% block body %}
-<h1>Add tasks</h1>
+<h1 class="text-center">Add tasks</h1>
 <form action="">
-    <label for="new-task"></label>
-    <input type="text" name="new-task">
-    <input type="button" value="Add task">
+    <label for="new-task" class="mb-2">Insert a task</label>
+    <input type="text" name="new-task" class="form-control" style="width: 25%;" placeholder="Do dishes, watch finals...">
+    <br>
+    <input type="button" value="Add task" class="btn btn-success mt-2">
 </form>
+<a href="{% url 'tasks:index' %}" class="btn btn-primary mt-1">Cancel</a>
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block body %}
 <h1 class="text-center">Your tasks</h1>
 
-<a href="/add" class="btn btn-primary m-3">Add tasks</a>
+<a href="{% url 'tasks:add' %}" class="btn btn-primary m-3">Add tasks</a>
 
 <ul>
 {% for task in tasks %}
