@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-tasks = ['Lavar a louça', 'Tirar roupa do varal', 'Jogar videogame']
+tasks = []
 
 # Create your views here.
 def index(request):
@@ -10,4 +10,11 @@ def index(request):
 
 
 def add(request):
+    if request.method == 'POST':
+        new_task = request.POST['new-task']
+        if not new_task:
+            return render(request, "tasks/add.html")
+        tasks.append(new_task)
+        return redirect("/tasks") # Must use an url parser since hard coding url is bad practice
+        
     return render(request, "tasks/add.html")

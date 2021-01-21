@@ -2,11 +2,12 @@
 
 {% block body %}
 <h1 class="text-center">Add tasks</h1>
-<form action="">
+<form action="{% url 'tasks:add' %}" method="POST">
     <label for="new-task" class="mb-2">Insert a task</label>
     <input type="text" name="new-task" class="form-control" style="width: 25%;" placeholder="Do dishes, watch finals...">
     <br>
-    <input type="button" value="Add task" class="btn btn-success mt-2">
+    <input type="submit" value="Add task" class="btn btn-success mt-2">
+    {% csrf_token %}
 </form>
 <a href="{% url 'tasks:index' %}" class="btn btn-primary mt-1">Cancel</a>
 {% endblock %}
