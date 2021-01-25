@@ -13,14 +13,14 @@ class NewTaskForm(forms.Form):
     new_task = forms.CharField(label=False, widget=forms.TextInput(attrs={"class": "form-control mt-1", "style": "width: 35%"}), required=True)
     """
     • In order to use min_value and max_value (and potentially other tools for validation) while using a widget (like 
-    in this case, for CSS class), you must match the type of the widget and the type of field (e.g. IntegerField/NumberInput,
-    and in other cases, probably CharField/TextInput). min and max_value didn't work when those weren't matched.
+    in this case, for a CSS class), you must match the type of the widget and the type of field (e.g. IntegerField/NumberInput,
+    and in other cases, probably CharField/TextInput). min and max_value didn't work when those fields weren't matched.
 
-    • Multiple attrs (attributes) can be placed in dictionary format. In the first field I decided to use inline-css, while the second
-    field I opted to use the class "input-width", which was written in the style tag in the template file.
+    • Multiple attrs (attributes) can be placed in a dictionary format. In the first field I decided to use inline-css, while the second
+    field I opted to use the class "input-width", which was written in the te mplate file style tag.
 
     """
-    priority = forms.IntegerField(min_value=0, max_value=10, widget=forms.NumberInput(attrs={"class": "form-control input-width mt-1"}))
+    priority = forms.IntegerField(min_value=0, max_value=5, widget=forms.NumberInput(attrs={"class": "form-control input-width mt-1"}))
 
 
 # Create your views here.
@@ -32,11 +32,18 @@ def index(request):
 
 def add(request):
     if request.method == 'POST':
-        new_task = request.POST['new_task']
-        if not new_task:
-            return render(request, "tasks/add.html")
-        tasks.append(new_task)
-        return redirect("/tasks") # Must use an url parser since hard coding url is bad practice
+        form = NewTaskForm(request.POST)
+
+        if form.is_valid():
+
+            task = form.cleaned_data["new_task"]
+
+            tasks.append(task)
+        
+        else:
+            return render(request, "tasks/add.html", {
+                "form": form
+            })
         
     return render(request, "tasks/add.html", {
         "form": NewTaskForm()
