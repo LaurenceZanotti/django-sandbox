@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django import forms
 
 tasks = []
@@ -20,7 +21,7 @@ class NewTaskForm(forms.Form):
     field I opted to use the class "input-width", which was written in the te mplate file style tag.
 
     """
-    priority = forms.IntegerField(min_value=0, max_value=5, widget=forms.NumberInput(attrs={"class": "form-control input-width mt-1"}))
+    # priority = forms.IntegerField(min_value=0, max_value=5, widget=forms.NumberInput(attrs={"class": "form-control input-width mt-1"}))
 
 
 # Create your views here.
@@ -31,15 +32,15 @@ def index(request):
 
 
 def add(request):
+    # If the route receives a post request
     if request.method == 'POST':
+        # Store form fields as Django form
         form = NewTaskForm(request.POST)
-
+        # Use Django built-in form validation
         if form.is_valid():
-
             task = form.cleaned_data["new_task"]
-
             tasks.append(task)
-        
+            return redirect(reverse("tasks:index")) # Do a "reverse engineer" to find where the url from tasks:index is
         else:
             return render(request, "tasks/add.html", {
                 "form": form
