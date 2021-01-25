@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 
-tasks = []
-
 class NewTaskForm(forms.Form):
     """
     • Labels are put on by default and named after the variable name (in this case, new_task will be parsed as "New task:", if set to True)
@@ -26,8 +24,12 @@ class NewTaskForm(forms.Form):
 
 # Create your views here.
 def index(request):
+
+    if "tasks" not in request.session:
+        request.session["tasks"] = []
+
     return render(request, "tasks/index.html", {
-        "tasks": tasks
+        "tasks": request.session["tasks"]
     })
 
 
@@ -36,10 +38,10 @@ def add(request):
     if request.method == 'POST':
         # Store form fields as Django form
         form = NewTaskForm(request.POST)
-        # Use Django built-in form validation
+        # Use Django built-in form validation 
         if form.is_valid():
             task = form.cleaned_data["new_task"]
-            tasks.append(task)
+            request.session["tasks"] += [task]
             return redirect(reverse("tasks:index")) # Do a "reverse engineer" to find where the url from tasks:index is
         else:
             return render(request, "tasks/add.html", {
